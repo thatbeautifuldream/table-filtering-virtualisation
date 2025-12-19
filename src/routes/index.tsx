@@ -7,6 +7,12 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { FilterDropdown } from "@/components/ui/filter-dropdown";
 import { SearchInput } from "@/components/ui/search-input";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { getCharacters } from "@/data/demo.characters";
 
 export const Route = createFileRoute("/")({
@@ -165,7 +171,7 @@ function App() {
 				</Button>
 			</div>
 
-			<div className="flex-1 border border-border overflow-hidden flex flex-col">
+			<div className="flex-1 border border-border overflow-hidden flex flex-col relative">
 				<div ref={parentRef} className="flex-1 overflow-auto bg-card">
 					<div
 						className="sticky top-0 z-10 bg-muted border-b border-border grid"
@@ -283,6 +289,51 @@ function App() {
 							);
 						})}
 					</div>
+				</div>
+
+				{/* Scroll to top and bottom buttons */}
+				<div className="absolute bottom-4 right-4 flex flex-col gap-2">
+					<TooltipProvider>
+						<Tooltip>
+							<TooltipTrigger>
+								<Button
+									size="icon"
+									variant="outline"
+									onClick={() =>
+										parentRef.current?.scrollTo({ top: 0, behavior: "smooth" })
+									}
+									className="shadow-lg"
+								>
+									<ChevronUp className="h-4 w-4" />
+								</Button>
+							</TooltipTrigger>
+							<TooltipContent side="left">
+								<p>Scroll to Top</p>
+							</TooltipContent>
+						</Tooltip>
+					</TooltipProvider>
+					<TooltipProvider>
+						<Tooltip>
+							<TooltipTrigger>
+								<Button
+									size="icon"
+									variant="outline"
+									onClick={() =>
+										parentRef.current?.scrollTo({
+											top: parentRef.current.scrollHeight,
+											behavior: "smooth",
+										})
+									}
+									className="shadow-lg"
+								>
+									<ChevronDown className="h-4 w-4" />
+								</Button>
+							</TooltipTrigger>
+							<TooltipContent side="left">
+								<p>Scroll to Bottom</p>
+							</TooltipContent>
+						</Tooltip>
+					</TooltipProvider>
 				</div>
 			</div>
 		</main>

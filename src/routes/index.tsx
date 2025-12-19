@@ -82,7 +82,7 @@ function App() {
 
 	const columns = [
 		{ key: "checkbox", label: "", width: "60px" },
-		{ key: "name", label: "Name", width: "200px" },
+		{ key: "name", label: "Name", width: "250px" },
 		{ key: "location", label: "Location", width: "120px" },
 		{ key: "health", label: "Health", width: "120px" },
 		{ key: "power", label: "Power", width: "100px" },

@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { FilterDropdown } from "@/components/ui/filter-dropdown";
@@ -21,8 +22,9 @@ function LoadingState() {
 	return (
 		<main className="h-screen flex items-center justify-center bg-background">
 			<div className="text-center">
-				<div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent mb-4" />
-				<p className="text-muted-foreground">Loading characters...</p>
+				<p className="text-muted-foreground animate-pulse">
+					Loading characters...
+				</p>
 			</div>
 		</main>
 	);
@@ -149,7 +151,11 @@ function App() {
 						onChange={(e) => setSearchQuery(e.target.value)}
 					/>
 				</div>
-				<Button onClick={handleToggleViewed} disabled={selectedIds.size === 0}>
+				<Button
+					onClick={handleToggleViewed}
+					disabled={selectedIds.size === 0}
+					variant="secondary"
+				>
 					{Array.from(selectedIds).some((id) => !viewedIds.has(id))
 						? "Mark as Viewed"
 						: "Mark as Unviewed"}
@@ -159,7 +165,7 @@ function App() {
 				</Button>
 			</div>
 
-			<div className="flex-1 border border-border rounded overflow-hidden flex flex-col">
+			<div className="flex-1 border border-border overflow-hidden flex flex-col">
 				<div ref={parentRef} className="flex-1 overflow-auto bg-card">
 					<div
 						className="sticky top-0 z-10 bg-muted border-b border-border grid"
@@ -258,17 +264,17 @@ function App() {
 										{character.location}
 									</div>
 									<div className="px-4 py-3 text-sm overflow-hidden text-ellipsis">
-										<span
-											className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-												character.health === "Healthy"
-													? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-													: character.health === "Injured"
-														? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
-														: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
-											}`}
+										<Badge
+											variant={
+												character.health.toLowerCase() as
+													| "healthy"
+													| "injured"
+													| "critical"
+											}
+											className="uppercase tracking-wider text-xs"
 										>
 											{character.health}
-										</span>
+										</Badge>
 									</div>
 									<div className="px-4 py-3 text-sm text-muted-foreground overflow-hidden text-ellipsis">
 										{character.power.toLocaleString()}

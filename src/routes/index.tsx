@@ -12,6 +12,19 @@ function App() {
 	const characters = Route.useLoaderData();
 	const parentRef = useRef<HTMLDivElement>(null);
 
+	const columns = [
+		{ key: "id", label: "ID", width: "100px" },
+		{ key: "name", label: "Name", width: "200px" },
+		{ key: "location", label: "Location", width: "120px" },
+		{ key: "health", label: "Health", width: "120px" },
+		{ key: "power", label: "Power", width: "100px" },
+	] as const;
+
+	const minWidth = columns.reduce(
+		(sum, col) => sum + parseInt(col.width, 10),
+		0,
+	);
+
 	const rowVirtualizer = useVirtualizer({
 		count: characters.length,
 		getScrollElement: () => parentRef.current,
@@ -22,31 +35,28 @@ function App() {
 	return (
 		<main className="h-screen flex flex-col px-4 py-3">
 			<div className="flex-1 border border-gray-200 rounded overflow-hidden flex flex-col">
-				<div className="bg-gray-50 border-b border-gray-200">
-					<div className="grid grid-cols-[minmax(80px,100px)_minmax(120px,1fr)_minmax(100px,120px)_minmax(100px,120px)_minmax(80px,100px)] min-w-max">
-						<div className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider">
-							ID
-						</div>
-						<div className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider">
-							Name
-						</div>
-						<div className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider">
-							Location
-						</div>
-						<div className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider">
-							Health
-						</div>
-						<div className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider">
-							Power
-						</div>
-					</div>
-				</div>
 				<div ref={parentRef} className="flex-1 overflow-auto bg-white">
+					<div
+						className="sticky top-0 z-10 bg-gray-50 border-b border-gray-200 grid"
+						style={{
+							gridTemplateColumns: columns.map((col) => col.width).join(" "),
+							minWidth: `${minWidth}px`,
+						}}
+					>
+						{columns.map((column) => (
+							<div
+								key={column.key}
+								className="px-4 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider"
+							>
+								{column.label}
+							</div>
+						))}
+					</div>
 					<div
 						style={{
 							height: `${rowVirtualizer.getTotalSize()}px`,
 							position: "relative",
-							minWidth: "max-content",
+							minWidth: `${minWidth}px`,
 						}}
 					>
 						{rowVirtualizer.getVirtualItems().map((virtualRow) => {
@@ -54,27 +64,28 @@ function App() {
 							return (
 								<div
 									key={virtualRow.key}
-									className="grid grid-cols-[minmax(80px,100px)_minmax(120px,1fr)_minmax(100px,120px)_minmax(100px,120px)_minmax(80px,100px)] border-b border-gray-200 hover:bg-gray-50 absolute top-0 left-0 w-full min-w-max"
+									className="grid border-b border-gray-200 hover:bg-gray-50 absolute top-0 left-0 w-full"
 									style={{
+										gridTemplateColumns: columns
+											.map((col) => col.width)
+											.join(" "),
 										height: `${virtualRow.size}px`,
 										transform: `translateY(${virtualRow.start}px)`,
+										minWidth: `${minWidth}px`,
 									}}
 								>
-									<div className="px-4 py-3 text-sm text-gray-700 overflow-hidden text-ellipsis">
-										{character.id}
-									</div>
-									<div className="px-4 py-3 text-sm font-medium text-gray-900 overflow-hidden text-ellipsis">
-										{character.name}
-									</div>
-									<div className="px-4 py-3 text-sm text-gray-700 overflow-hidden text-ellipsis">
-										{character.location}
-									</div>
-									<div className="px-4 py-3 text-sm text-gray-700 overflow-hidden text-ellipsis">
-										{character.health}
-									</div>
-									<div className="px-4 py-3 text-sm text-gray-700 overflow-hidden text-ellipsis">
-										{character.power}
-									</div>
+									{columns.map((column) => (
+										<div
+											key={column.key}
+											className={`px-4 py-3 text-sm overflow-hidden text-ellipsis ${
+												column.key === "name"
+													? "font-medium text-gray-900"
+													: "text-gray-700"
+											}`}
+										>
+											{character[column.key]}
+										</div>
+									))}
 								</div>
 							);
 						})}

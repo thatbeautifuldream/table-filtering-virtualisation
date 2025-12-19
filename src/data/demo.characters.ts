@@ -24,9 +24,9 @@ const HEALTH_STATUSES: Character["health"][] = [
 ];
 
 export function generateCharacters(count: number = 1000): Character[] {
-	return Array.from({ length: count }, () => ({
-		id: faker.string.uuid(),
-		name: faker.person.firstName(),
+	return Array.from({ length: count }, (_, index) => ({
+		id: `ch_${String(index + 1).padStart(3, "0")}`,
+		name: faker.person.fullName(),
 		location: faker.helpers.arrayElement(LOCATIONS),
 		health: faker.helpers.arrayElement(HEALTH_STATUSES),
 		power: faker.number.int({ min: 100, max: 10_000 }),

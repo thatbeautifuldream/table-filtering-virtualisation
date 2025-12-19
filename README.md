@@ -103,6 +103,7 @@ src/
 ### UI Components
 
 All UI components are built with:
+
 - **TypeScript interfaces** for type safety
 - **Accessibility best practices** (ARIA labels, semantic HTML)
 - **Tailwind CSS** for consistent styling
@@ -127,6 +128,7 @@ pnpm test
 ```
 
 Test files are co-located with components:
+
 - `*.test.tsx` - Component tests
 - `src/test/setup.ts` - Test configuration
 
@@ -139,6 +141,7 @@ pnpm storybook
 ```
 
 Stories are co-located with components:
+
 - `*.stories.tsx` - Component stories
 
 ## Data Structure
@@ -147,11 +150,11 @@ Each character has the following shape:
 
 ```typescript
 {
-  id: string;              // Unique identifier (e.g., "ch_001")
-  name: string;            // Character name
+  id: string; // Unique identifier (e.g., "ch_001")
+  name: string; // Character name
   location: "Konoha" | "Suna" | "Kiri" | "Iwa" | "Kumo";
   health: "Healthy" | "Injured" | "Critical";
-  power: number;           // Range: 100-10,000
+  power: number; // Range: 100-10,000
 }
 ```
 
@@ -180,6 +183,7 @@ Each character has the following shape:
 ## Future Enhancements
 
 Potential improvements:
+
 - Server-side pagination
 - Export to CSV/JSON
 - Column resizing
@@ -196,6 +200,7 @@ MIT
 ## Author
 
 Built as a frontend engineer assignment demonstrating:
+
 - Performance optimization techniques
 - Clean, maintainable code structure
 - Comprehensive testing practices

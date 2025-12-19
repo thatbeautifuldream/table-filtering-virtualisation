@@ -293,47 +293,63 @@ function App() {
 
 				{/* Scroll to top and bottom buttons */}
 				<div className="absolute bottom-4 right-4 flex flex-col gap-2">
-					<TooltipProvider>
-						<Tooltip>
-							<TooltipTrigger>
-								<Button
-									size="icon"
-									variant="outline"
-									onClick={() =>
-										parentRef.current?.scrollTo({ top: 0, behavior: "smooth" })
-									}
-									className="shadow-lg"
-								>
-									<ChevronUp className="h-4 w-4" />
-								</Button>
-							</TooltipTrigger>
-							<TooltipContent side="left">
-								<p>Scroll to Top</p>
-							</TooltipContent>
-						</Tooltip>
-					</TooltipProvider>
-					<TooltipProvider>
-						<Tooltip>
-							<TooltipTrigger>
-								<Button
-									size="icon"
-									variant="outline"
-									onClick={() =>
-										parentRef.current?.scrollTo({
-											top: parentRef.current.scrollHeight,
-											behavior: "smooth",
-										})
-									}
-									className="shadow-lg"
-								>
-									<ChevronDown className="h-4 w-4" />
-								</Button>
-							</TooltipTrigger>
-							<TooltipContent side="left">
-								<p>Scroll to Bottom</p>
-							</TooltipContent>
-						</Tooltip>
-					</TooltipProvider>
+					{(() => {
+						if (!parentRef.current) return null;
+						const scrollPosition = parentRef.current.scrollTop;
+						const maxScroll =
+							parentRef.current.scrollHeight - parentRef.current.clientHeight;
+
+						return (
+							<>
+								<TooltipProvider>
+									<Tooltip>
+										<TooltipTrigger>
+											<Button
+												size="icon"
+												variant="outline"
+												onClick={() =>
+													parentRef.current?.scrollTo({
+														top: 0,
+														behavior: "smooth",
+													})
+												}
+												disabled={scrollPosition <= 10}
+												className="shadow-lg"
+											>
+												<ChevronUp className="h-4 w-4" />
+											</Button>
+										</TooltipTrigger>
+										<TooltipContent side="left">
+											<p>Scroll to Top</p>
+										</TooltipContent>
+									</Tooltip>
+								</TooltipProvider>
+								<TooltipProvider>
+									<Tooltip>
+										<TooltipTrigger>
+											<Button
+												size="icon"
+												variant="outline"
+												onClick={() =>
+													parentRef.current?.scrollTo({
+														top: parentRef.current.scrollHeight,
+														behavior: "smooth",
+													})
+												}
+												disabled={scrollPosition >= maxScroll - 10}
+												className="shadow-lg"
+											>
+												<ChevronDown className="h-4 w-4" />
+											</Button>
+										</TooltipTrigger>
+										<TooltipContent side="left">
+											<p>Scroll to Bottom</p>
+										</TooltipContent>
+									</Tooltip>
+								</TooltipProvider>
+							</>
+						);
+					})()}
 				</div>
 			</div>
 		</main>

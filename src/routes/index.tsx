@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useVirtualizer } from "@tanstack/react-virtual";
+import Fuse from "fuse.js";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
 import { Badge } from "@/components/ui/badge";
@@ -52,12 +53,11 @@ function App() {
 		let result = [...characters];
 
 		if (searchQuery) {
-			const query = searchQuery.toLowerCase();
-			result = result.filter(
-				(char) =>
-					char.name.toLowerCase().includes(query) ||
-					char.location.toLowerCase().includes(query),
-			);
+			const fuse = new Fuse(result, {
+				keys: ["name", "location"],
+				threshold: 0.25,
+			});
+			result = fuse.search(searchQuery).map((fuseResult) => fuseResult.item);
 		}
 
 		if (healthFilters.length > 0) {
